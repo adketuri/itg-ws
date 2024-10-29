@@ -14,8 +14,6 @@ function App() {
     }
   }, [lastMessage]);
 
-  // const handleClickSendMessage = useCallback(() => sendMessage("Hello"), []);
-
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
     [ReadyState.OPEN]: "Open",
@@ -25,20 +23,30 @@ function App() {
   }[readyState];
 
   return (
-    <div>
-      <button
-        onClick={() => sendMessage(JSON.stringify({ message: "hello world" }))}
-        disabled={readyState !== ReadyState.OPEN}
-      >
-        hello
-      </button>
-      <span>The WebSocket is currently {connectionStatus}</span>
-      {lastMessage ? <span>Last message: {lastMessage.data}</span> : null}
-      <ul>
-        {messageHistory.map((message, idx) => (
-          <span key={idx}>{message ? message.data : null}</span>
-        ))}
-      </ul>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <span>
+        The WebSocket is currently <b>{connectionStatus}</b>
+      </span>
+
+      <div>
+        <button
+          onClick={() =>
+            sendMessage(JSON.stringify({ message: "hello world" }))
+          }
+          disabled={readyState !== ReadyState.OPEN}
+        >
+          hello
+        </button>
+      </div>
+      <div style={{ display: "flex", flex: 1 }}>
+        <ul>
+          {messageHistory.map((message, idx) => (
+            <li>
+              <span key={idx}>{message ? message.data : null}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
