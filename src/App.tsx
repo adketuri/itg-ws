@@ -31,11 +31,16 @@ function App() {
       <div>
         <button
           onClick={() =>
-            sendMessage(JSON.stringify({ message: "hello world" }))
+            sendMessage(
+              JSON.stringify({
+                type: "createLobby",
+                payload: { machine: { player1: { playerName: "teejusb" } } },
+              })
+            )
           }
           disabled={readyState !== ReadyState.OPEN}
         >
-          hello
+          createLobby
         </button>
       </div>
       <div style={{ display: "flex", flex: 1 }}>
