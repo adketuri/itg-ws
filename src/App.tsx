@@ -4,6 +4,7 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 
 function App() {
   const socketUrl = "ws://localhost:3000";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>([]);
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
@@ -22,13 +23,16 @@ function App() {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
+  const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <span>
         The WebSocket is currently <b>{connectionStatus}</b>
       </span>
 
-      <div>
+      <div style={{ display: "flex", flexDirection: "row" }}>
         <button
           onClick={() =>
             sendMessage(
@@ -42,6 +46,35 @@ function App() {
         >
           createLobby
         </button>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <input
+            placeholder="code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+          />
+          <input
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            onClick={() =>
+              sendMessage(
+                JSON.stringify({
+                  type: "joinLobby",
+                  payload: {
+                    machine: { player1: { playerName: "zexyu" } },
+                    code,
+                    password,
+                  },
+                })
+              )
+            }
+            disabled={readyState !== ReadyState.OPEN}
+          >
+            joinLobby
+          </button>
+        </div>
       </div>
       <div style={{ display: "flex", flex: 1 }}>
         <ul>
