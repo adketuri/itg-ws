@@ -46,6 +46,14 @@ function App() {
         >
           createLobby
         </button>
+        <button
+          onClick={() =>
+            sendMessage(JSON.stringify({ type: "searchLobby", payload: {} }))
+          }
+          disabled={readyState !== ReadyState.OPEN}
+        >
+          searchLobby
+        </button>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <input
             placeholder="code"
@@ -79,8 +87,8 @@ function App() {
       <div style={{ display: "flex", flex: 1 }}>
         <ul>
           {messageHistory.map((message, idx) => (
-            <li>
-              <span key={idx}>{message ? message.data : null}</span>
+            <li key={idx}>
+              <span>{message ? message.data : null}</span>
             </li>
           ))}
         </ul>
