@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
 function App() {
@@ -27,73 +26,106 @@ function App() {
   const [password, setPassword] = useState("");
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <span>
-        The WebSocket is currently <b>{connectionStatus}</b>
-      </span>
+    <>
+      <header
+        style={{
+          position: "sticky",
+          top: 0,
+          backgroundColor: "#333",
+          padding: 10,
+          zIndex: 1000,
+        }}
+      >
+        <span>
+          The WebSocket is currently <b>{connectionStatus}</b>
+        </span>
 
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <button
-          onClick={() =>
-            sendMessage(
-              JSON.stringify({
-                type: "createLobby",
-                payload: { machine: { player1: { playerName: "teejusb" } } },
-              })
-            )
-          }
-          disabled={readyState !== ReadyState.OPEN}
-        >
-          createLobby
-        </button>
-        <button
-          onClick={() =>
-            sendMessage(JSON.stringify({ type: "searchLobby", payload: {} }))
-          }
-          disabled={readyState !== ReadyState.OPEN}
-        >
-          searchLobby
-        </button>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <input
-            placeholder="code"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-          />
-          <input
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <div style={{ display: "flex", flexDirection: "row" }}>
           <button
             onClick={() =>
               sendMessage(
                 JSON.stringify({
-                  type: "joinLobby",
-                  payload: {
-                    machine: { player1: { playerName: "zexyu" } },
-                    code,
-                    password,
-                  },
+                  type: "createLobby",
+                  payload: { machine: { player1: { playerName: "teejusb" } } },
                 })
               )
             }
             disabled={readyState !== ReadyState.OPEN}
           >
-            joinLobby
+            createLobby
+          </button>
+          <button
+            onClick={() =>
+              sendMessage(JSON.stringify({ type: "searchLobby", payload: {} }))
+            }
+            disabled={readyState !== ReadyState.OPEN}
+          >
+            searchLobby
+          </button>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <input
+              placeholder="code"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+            />
+            <input
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button
+              onClick={() =>
+                sendMessage(
+                  JSON.stringify({
+                    type: "joinLobby",
+                    payload: {
+                      machine: { player1: { playerName: "zexyu" } },
+                      code,
+                      password,
+                    },
+                  })
+                )
+              }
+              disabled={readyState !== ReadyState.OPEN}
+            >
+              joinLobby
+            </button>
+          </div>
+          <button
+            onClick={() =>
+              sendMessage(JSON.stringify({ type: "leaveLobby", payload: {} }))
+            }
+            disabled={readyState !== ReadyState.OPEN}
+          >
+            leaveLobby
+          </button>
+          <button
+            onClick={() =>
+              sendMessage(JSON.stringify({ type: "readyUp", payload: {} }))
+            }
+            disabled={readyState !== ReadyState.OPEN}
+          >
+            readyUp
           </button>
         </div>
+      </header>
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          flexDirection: "column",
+          margin: 10,
+        }}
+      >
+        {messageHistory.map((message, idx) => {
+          return (
+            <div key={idx}>
+              <p style={{ margin: 0 }}>{message ? message.data : null}</p>
+            </div>
+          );
+        })}
       </div>
-      <div style={{ display: "flex", flex: 1 }}>
-        <ul>
-          {messageHistory.map((message, idx) => (
-            <li key={idx}>
-              <span>{message ? message.data : null}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    </>
   );
 }
 
