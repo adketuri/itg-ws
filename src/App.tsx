@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { LoggedMessage } from "./types/models.types";
 
 function App() {
   const socketUrl = "ws://localhost:3000";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>([]);
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const [messageHistory, setMessageHistory] = useState<LoggedMessage[]>([]);
+
+  const {
+    sendMessage: sendSocket,
+    lastMessage,
+    readyState,
+  } = useWebSocket(socketUrl);
+
+  const sendMessage = (message: string) => {
+    setMessageHistory((prev) => prev.concat({ message, outbound: true }));
+    sendSocket(message);
+  };
 
   useEffect(() => {
     if (lastMessage !== null) {
-      setMessageHistory((prev) => prev.concat(lastMessage));
+      setMessageHistory((prev) =>
+        prev.concat({ message: lastMessage.data, outbound: false })
+      );
     }
   }, [lastMessage]);
 
@@ -42,11 +54,17 @@ function App() {
 
         <div style={{ display: "flex", flexDirection: "row" }}>
           <button
+            onClick={() => sendMessage("")}
+            disabled={readyState !== ReadyState.OPEN}
+          >
+            Empty
+          </button>
+          <button
             onClick={() =>
               sendMessage(
                 JSON.stringify({
-                  type: "createLobby",
-                  payload: { machine: { player1: { playerName: "teejusb" } } },
+                  event: "createLobby",
+                  data: { machine: { player1: { playerName: "teejusb" } } },
                 })
               )
             }
@@ -56,7 +74,7 @@ function App() {
           </button>
           <button
             onClick={() =>
-              sendMessage(JSON.stringify({ type: "searchLobby", payload: {} }))
+              sendMessage(JSON.stringify({ event: "searchLobby", data: {} }))
             }
             disabled={readyState !== ReadyState.OPEN}
           >
@@ -77,8 +95,8 @@ function App() {
               onClick={() =>
                 sendMessage(
                   JSON.stringify({
-                    type: "joinLobby",
-                    payload: {
+                    event: "joinLobby",
+                    data: {
                       machine: { player1: { playerName: "zexyu" } },
                       code,
                       password,
@@ -93,7 +111,59 @@ function App() {
           </div>
           <button
             onClick={() =>
-              sendMessage(JSON.stringify({ type: "leaveLobby", payload: {} }))
+              sendMessage(
+                JSON.stringify({
+                  event: "lobbyState",
+                })
+              )
+            }
+            disabled={readyState !== ReadyState.OPEN}
+          >
+            lobbyState
+          </button>
+          <button
+            onClick={() =>
+              sendMessage(
+                JSON.stringify({
+                  event: "updateMachine",
+                  data: {
+                    machine: {
+                      player1: { playerId: "P1", profileName: "teejusb" },
+                      player2: { playerId: "P2", profileName: "Moistbruh" },
+                    },
+                  },
+                })
+              )
+            }
+            disabled={readyState !== ReadyState.OPEN}
+          >
+            updateMachine
+          </button>
+
+          <button
+            onClick={() =>
+              sendMessage(
+                JSON.stringify({
+                  event: "selectSong",
+                  data: {
+                    songInfo: {
+                      songPath: "11 guys/too many guys",
+                      title: "TOO MANY GUYS",
+                      artist: "The Guys",
+                      songLength: 123,
+                    },
+                  },
+                })
+              )
+            }
+            disabled={readyState !== ReadyState.OPEN}
+          >
+            selectSong
+          </button>
+
+          <button
+            onClick={() =>
+              sendMessage(JSON.stringify({ event: "leaveLobby", data: {} }))
             }
             disabled={readyState !== ReadyState.OPEN}
           >
@@ -101,7 +171,9 @@ function App() {
           </button>
           <button
             onClick={() =>
-              sendMessage(JSON.stringify({ type: "readyUp", payload: {} }))
+              sendMessage(
+                JSON.stringify({ event: "readyUp", data: { playerId: "P1" } })
+              )
             }
             disabled={readyState !== ReadyState.OPEN}
           >
@@ -117,10 +189,13 @@ function App() {
           margin: 10,
         }}
       >
-        {messageHistory.map((message, idx) => {
+        {messageHistory.map((msg, idx) => {
+          const { message, outbound } = msg;
           return (
             <div key={idx}>
-              <p style={{ margin: 0 }}>{message ? message.data : null}</p>
+              <p style={{ margin: 0 }}>
+                {outbound ? "➡️" : "⬅️"} {message}
+              </p>
             </div>
           );
         })}

@@ -64,3 +64,8 @@ export interface LobbyInfo {
   playerCount: number;
   spectatorCount: number;
 }
+
+export interface LoggedMessage {
+  message: string;
+  outbound: boolean;
+}
