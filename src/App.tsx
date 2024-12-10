@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { EventMessage, UpdateMachinePayload } from "./types/events.types";
 
 function App() {
   const socketUrl = "ws://localhost:3000";
@@ -123,19 +124,36 @@ function App() {
             lobbyState
           </button>
           <button
-            onClick={() =>
-              sendMessage(
-                JSON.stringify({
-                  event: "updateMachine",
-                  data: {
-                    machine: {
-                      player1: { playerId: "P1", profileName: "teejusb" },
-                      player2: { playerId: "P2", profileName: "Moistbruh" },
+            onClick={() => {
+              const event: EventMessage<UpdateMachinePayload> = {
+                event: "updateMachine",
+                data: {
+                  machine: {
+                    player1: {
+                      playerId: "P1",
+                      profileName: "teejusb",
+                      screenName: "ScreenGameplay",
+                      ready: true,
+                      songProgression: {
+                        currentTime: Math.random() * 10,
+                        totalTime: 10,
+                      },
+                    },
+                    player2: {
+                      playerId: "P2",
+                      profileName: "Moistbruh",
+                      screenName: "ScreenGameplay",
+                      ready: true,
+                      songProgression: {
+                        currentTime: Math.random() * 10,
+                        totalTime: 10,
+                      },
                     },
                   },
-                })
-              )
-            }
+                },
+              };
+              sendMessage(JSON.stringify(event));
+            }}
             disabled={readyState !== ReadyState.OPEN}
           >
             updateMachine

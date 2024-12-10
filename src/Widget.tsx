@@ -5,7 +5,9 @@ import {
   EventMessage,
   LobbyStatePayload,
   ResponseStatusPayload,
+  SelectSongPayload,
 } from "./types/events.types";
+import { SongInfo } from "./components/SongInfo";
 
 function Widget() {
   const socketUrl = "ws://localhost:3000";
@@ -35,6 +37,7 @@ function Widget() {
     }
   }, [readyState]);
 
+  // Handle any received messages
   const [lobby, setLobby] = useState<LobbyStatePayload>();
   const [error, setError] = useState<string>();
   useEffect(() => {
@@ -57,7 +60,15 @@ function Widget() {
   }
 
   if (lobby) {
-    return JSON.stringify(lobby, null, 2);
+    const progress =
+      (lobby.players[0].songProgression?.currentTime || 0) /
+      (lobby.players[0].songProgression?.totalTime || 1);
+    return (
+      <>
+        <SongInfo songInfo={lobby?.songInfo} progress={progress} />
+        {JSON.stringify(lobby)}
+      </>
+    );
   }
 
   return <>{connectionStatus}</>;
