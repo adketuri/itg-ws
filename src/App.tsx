@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { LoggedMessage } from "./types/models.types";
 
 function App() {
   const socketUrl = "ws://localhost:3000";
 
-  const [messageHistory, setMessageHistory] = useState<LoggedMessage[]>([]);
+  const [messageHistory, setMessageHistory] = useState<
+    { message: string; outbound: boolean }[]
+  >([]);
 
   const {
     sendMessage: sendSocket,
