@@ -5,9 +5,9 @@ import {
   EventMessage,
   LobbyStatePayload,
   ResponseStatusPayload,
-  SelectSongPayload,
 } from "./types/events.types";
 import { SongInfo } from "./components/SongInfo";
+import { Pacemaker } from "./components/Pacemaker";
 
 function Widget() {
   const socketUrl = "ws://localhost:3000";
@@ -65,8 +65,10 @@ function Widget() {
       (lobby.players[0].songProgression?.totalTime || 1);
     return (
       <>
-        <SongInfo songInfo={lobby?.songInfo} progress={progress} />
-        {JSON.stringify(lobby)}
+        <SongInfo songInfo={lobby.songInfo} progress={progress} />
+        {lobby.players.map((p) => (
+          <Pacemaker key={p.profileName} player={p} />
+        ))}
       </>
     );
   }

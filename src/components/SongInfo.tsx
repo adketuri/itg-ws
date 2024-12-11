@@ -14,8 +14,10 @@ export const SongInfo: FC<
         style={{ width: `${Math.floor(progress * 100)}%` }}
       />
       <div className="bar-info">{songInfo.title}</div>
-      <div className="bar-info" style={{ fontSize: 10, top: "60%" }}>
-        {songInfo.songPath}
+      <div className="bar-info" style={{ fontSize: 14, top: "50%" }}>
+        {songInfo.songPath.includes("/")
+          ? songInfo.songPath.split("/")[0]
+          : songInfo.songPath}
       </div>
     </div>
   );
