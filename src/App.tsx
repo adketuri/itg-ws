@@ -54,18 +54,27 @@ function App() {
           zIndex: 1000,
         }}
       >
-        <span>
+        <p style={{ marginBottom: 10 }}>
           The WebSocket is currently <b>{connectionStatus}</b>
-        </span>
+        </p>
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 10,
+            flexDirection: "row",
+          }}
+        >
           <button
+            style={{ flex: 1 }}
             onClick={() => sendMessage("")}
             disabled={readyState !== ReadyState.OPEN}
           >
             Empty
           </button>
           <button
+            style={{ flex: 1 }}
             onClick={() => {
               const event: EventMessage<CreateLobbyData> = {
                 event: "createLobby",
@@ -88,6 +97,7 @@ function App() {
             createLobby
           </button>
           <button
+            style={{ flex: 1 }}
             onClick={() =>
               sendMessage(JSON.stringify({ event: "searchLobby", data: {} }))
             }
@@ -95,7 +105,7 @@ function App() {
           >
             searchLobby
           </button>
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <input
               placeholder="code"
               value={code}
@@ -125,6 +135,7 @@ function App() {
             </button>
           </div>
           <button
+            style={{ flex: 1 }}
             onClick={() =>
               sendMessage(
                 JSON.stringify({
@@ -137,6 +148,7 @@ function App() {
             lobbyState
           </button>
           <button
+            style={{ flex: 1 }}
             onClick={() => {
               const event: EventMessage<UpdateMachinePayload> = {
                 event: "updateMachine",
@@ -177,6 +189,7 @@ function App() {
           </button>
 
           <button
+            style={{ flex: 1 }}
             onClick={() =>
               sendMessage(
                 JSON.stringify({
@@ -198,6 +211,7 @@ function App() {
           </button>
 
           <button
+            style={{ flex: 1 }}
             onClick={() =>
               sendMessage(JSON.stringify({ event: "leaveLobby", data: {} }))
             }
@@ -206,6 +220,7 @@ function App() {
             leaveLobby
           </button>
           <button
+            style={{ flex: 1 }}
             onClick={() =>
               sendMessage(
                 JSON.stringify({ event: "readyUp", data: { playerId: "P1" } })

@@ -1,3 +1,6 @@
 .rank-ordinal {
-  font-size: 48px;
+  font-size: 9vw;
+  text-shadow: 2px 2px 0px black;
+  margin-left: 10px;
+  margin-right: 10px;
 }

@@ -7,7 +7,7 @@ import {
   ResponseStatusPayload,
 } from "./types/events.types";
 import { SongInfo } from "./components/SongInfo";
-import { Pacemaker } from "./components/Pacemaker";
+import { Pacemaker, PacemakerWrapper } from "./components/Pacemaker";
 import { Ranking } from "./components/Ranking";
 
 function Widget() {
@@ -33,7 +33,11 @@ function Widget() {
       sendMessage(
         JSON.stringify({
           event: "spectateLobby",
-          data: { spectator: { profileName: "Widget" }, code, password },
+          data: {
+            spectator: { profileName: "Widget" },
+            code: code?.toUpperCase(),
+            password,
+          },
         })
       );
     }
@@ -41,7 +45,13 @@ function Widget() {
 
   // Handle any received messages
   const [lobby, setLobby] = useState<LobbyStatePayload>();
+  const averageScore: number =
+    (lobby?.players.reduce((prev, curr) => prev + (curr?.exScore || 0), 0) ||
+      0) / (lobby?.players.length || 1);
+
+  const [rankings, setRankings] = useState<Record<string, number>>({});
   const [error, setError] = useState<string>();
+
   useEffect(() => {
     if (lastMessage !== null) {
       const parsed = JSON.parse(lastMessage.data) as EventMessage;
@@ -50,9 +60,30 @@ function Widget() {
         case "responseStatus":
           setError((data as ResponseStatusPayload).message);
           break;
-        case "lobbyState":
-          setLobby(data as LobbyStatePayload);
+        case "lobbyState": {
+          const lobbyData = data as LobbyStatePayload;
+          // Get updated rankings from lobby data
+          if (pacemaker) {
+            let rank = 0;
+            const rankings: Record<string, number> = {};
+            for (let i = 0; i < lobbyData.players.length; i++) {
+              if (
+                i > 0 &&
+                lobbyData.players[i].exScore ===
+                  lobbyData.players[i - 1].exScore
+              ) {
+                rankings[lobbyData.players[i].profileName] =
+                  rankings[lobbyData.players[i - 1].profileName];
+              } else {
+                rankings[lobbyData.players[i].profileName] = rank;
+              }
+              rank++;
+            }
+            setRankings(rankings);
+          }
+          setLobby(lobbyData);
           break;
+        }
       }
     }
   }, [lastMessage]);
@@ -66,14 +97,31 @@ function Widget() {
       (lobby.players[0].songProgression?.currentTime || 0) /
       (lobby.players[0].songProgression?.totalTime || 1);
     return (
-      <>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+        }}
+      >
         <SongInfo songInfo={lobby.songInfo} progress={progress} />
         {!pacemaker && <Ranking players={lobby.players} />}
-        {pacemaker &&
-          lobby.players.map((p) => (
-            <Pacemaker key={p.profileName} player={p} />
-          ))}
-      </>
+        {pacemaker && (
+          <PacemakerWrapper>
+            {lobby.players
+              .sort((p1, p2) => (p1.profileName > p2.profileName ? 1 : -1))
+              .map((p, i) => (
+                <Pacemaker
+                  key={p.profileName}
+                  player={p}
+                  ranking={rankings[p.profileName]}
+                  averageScore={averageScore}
+                  index={i}
+                />
+              ))}
+          </PacemakerWrapper>
+        )}
+      </div>
     );
   }
 

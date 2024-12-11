@@ -1,8 +1,8 @@
 .bar-container {
-  background-color: #842f2f;
-  border: 2px solid white;
+  background-color: #211a0a;
   height: 64px;
-  width: 100%;
+  margin: 10px;
+  border-radius: 10px;
   position: relative;
 }
 
@@ -13,9 +13,10 @@
 }
 
 .bar-inner {
-  background-color: #f08080;
+  background-color: #493a16;
   height: 100%;
   transition: width 0.1s ease-in-out;
+  border-radius: 10px;
 }
 
 .bar-info {
@@ -27,9 +28,8 @@
   transform: translateX(-50%);
   font-size: 32px;
   text-align: center;
-  top: 0;
+  top: 2px;
   line-height: 1;
   font-weight: bold;
-  text-shadow: 1px 1px 0px black, -1px -1px 0px black, 1px -1px 0px black,
-    -1px 1px 0px black;
+  text-shadow: 2px 2px 0px black;
 }
