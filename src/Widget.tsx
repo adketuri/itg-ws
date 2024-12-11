@@ -8,6 +8,7 @@ import {
 } from "./types/events.types";
 import { SongInfo } from "./components/SongInfo";
 import { Pacemaker } from "./components/Pacemaker";
+import { Ranking } from "./components/Ranking";
 
 function Widget() {
   const socketUrl = "ws://localhost:3000";
@@ -15,6 +16,7 @@ function Widget() {
   const { code } = useParams();
   const [searchParams] = useSearchParams();
   const { lastMessage, readyState, sendMessage } = useWebSocket(socketUrl);
+  const pacemaker = searchParams.get("pacemaker") === "true";
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting...",
@@ -66,9 +68,11 @@ function Widget() {
     return (
       <>
         <SongInfo songInfo={lobby.songInfo} progress={progress} />
-        {lobby.players.map((p) => (
-          <Pacemaker key={p.profileName} player={p} />
-        ))}
+        {!pacemaker && <Ranking players={lobby.players} />}
+        {pacemaker &&
+          lobby.players.map((p) => (
+            <Pacemaker key={p.profileName} player={p} />
+          ))}
       </>
     );
   }

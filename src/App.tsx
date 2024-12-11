@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { EventMessage, UpdateMachinePayload } from "./types/events.types";
+import {
+  CreateLobbyData,
+  EventMessage,
+  UpdateMachinePayload,
+} from "./types/events.types";
 
 function App() {
   const socketUrl = "ws://localhost:3000";
@@ -62,14 +66,23 @@ function App() {
             Empty
           </button>
           <button
-            onClick={() =>
-              sendMessage(
-                JSON.stringify({
-                  event: "createLobby",
-                  data: { machine: { player1: { playerName: "teejusb" } } },
-                })
-              )
-            }
+            onClick={() => {
+              const event: EventMessage<CreateLobbyData> = {
+                event: "createLobby",
+                data: {
+                  machine: {
+                    player1: {
+                      playerId: "P1",
+                      profileName: "teejusb",
+                      screenName: "NoScreen",
+                      ready: false,
+                    },
+                  },
+                  password: "",
+                },
+              };
+              sendMessage(JSON.stringify(event));
+            }}
             disabled={readyState !== ReadyState.OPEN}
           >
             createLobby
@@ -138,6 +151,8 @@ function App() {
                         currentTime: Math.random() * 10,
                         totalTime: 10,
                       },
+                      exScore: Math.random(),
+                      score: Math.random(),
                     },
                     player2: {
                       playerId: "P2",
@@ -148,6 +163,8 @@ function App() {
                         currentTime: Math.random() * 10,
                         totalTime: 10,
                       },
+                      exScore: Math.random(),
+                      score: Math.random(),
                     },
                   },
                 },
