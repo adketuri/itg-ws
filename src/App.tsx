@@ -38,11 +38,11 @@ function App() {
     <>
       <header
         style={{
-          position: "sticky",
           top: 0,
           backgroundColor: "#333",
           padding: 10,
-          zIndex: 1000,
+          // position: "sticky",
+          // zIndex: 1000,
         }}
       >
         <p style={{ marginBottom: 10 }}>
@@ -57,13 +57,6 @@ function App() {
             flexDirection: "row",
           }}
         >
-          <button
-            style={{ flex: 1 }}
-            onClick={() => sendMessage("")}
-            disabled={readyState !== ReadyState.OPEN}
-          >
-            Empty
-          </button>
           <button
             style={{ flex: 1 }}
             onClick={() => {
@@ -229,6 +222,8 @@ function App() {
           flex: 1,
           flexDirection: "column",
           margin: 10,
+          overflow: "scroll",
+          height: "auto",
         }}
       >
         {messageHistory.map((msg, idx) => {

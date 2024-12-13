@@ -17,7 +17,7 @@ export const Fallback: FC = () => {
           maxWidth: 600,
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#101010",
+          backgroundColor: "#303030",
         }}
       >
         <div>

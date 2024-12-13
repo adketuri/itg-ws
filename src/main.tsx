@@ -10,9 +10,11 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/debug" element={<App />} />
         <Route path="/widgets/ranking/:code" element={<Widget />} />
         <Route path="/widgets/pacemaker/:code" element={<Widget pacemaker />} />
+        {import.meta.env.VITE_DEBUG_ROUTE && (
+          <Route path={import.meta.env.VITE_DEBUG_ROUTE} element={<App />} />
+        )}
         <Route path="*" element={<Fallback />} />
       </Routes>
     </BrowserRouter>
