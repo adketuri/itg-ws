@@ -10,13 +10,12 @@ import { SongInfo } from "./components/SongInfo";
 import { Pacemaker, PacemakerWrapper } from "./components/Pacemaker";
 import { Ranking } from "./components/Ranking";
 
-function Widget() {
+function Widget({ pacemaker }: { pacemaker?: boolean }) {
   const socketUrl = "ws://localhost:3000";
 
   const { code } = useParams();
   const [searchParams] = useSearchParams();
   const { lastMessage, readyState, sendMessage } = useWebSocket(socketUrl);
-  const pacemaker = searchParams.get("pacemaker") === "true";
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting...",
