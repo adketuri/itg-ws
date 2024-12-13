@@ -9,21 +9,14 @@ import {
 import { SongInfo } from "./components/SongInfo";
 import { Pacemaker, PacemakerWrapper } from "./components/Pacemaker";
 import { Ranking } from "./components/Ranking";
+import { connectionStatus } from "./constants";
 
 function Widget({ pacemaker }: { pacemaker?: boolean }) {
-  const socketUrl = "ws://localhost:3000";
-
   const { code } = useParams();
   const [searchParams] = useSearchParams();
-  const { lastMessage, readyState, sendMessage } = useWebSocket(socketUrl);
-
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting...",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  const { lastMessage, readyState, sendMessage } = useWebSocket(
+    import.meta.env.VITE_WS_SERVER_URL
+  );
 
   // On connect, spectate the room
   useEffect(() => {
@@ -124,7 +117,7 @@ function Widget({ pacemaker }: { pacemaker?: boolean }) {
     );
   }
 
-  return <>{connectionStatus}</>;
+  return <>{connectionStatus[readyState]}</>;
 }
 
 export default Widget;

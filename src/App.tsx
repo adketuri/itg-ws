@@ -5,10 +5,9 @@ import {
   EventMessage,
   UpdateMachinePayload,
 } from "./types/events.types";
+import { connectionStatus } from "./constants";
 
 function App() {
-  const socketUrl = "ws://localhost:3000";
-
   const [messageHistory, setMessageHistory] = useState<
     { message: string; outbound: boolean }[]
   >([]);
@@ -17,7 +16,7 @@ function App() {
     sendMessage: sendSocket,
     lastMessage,
     readyState,
-  } = useWebSocket(socketUrl);
+  } = useWebSocket(import.meta.env.VITE_WS_SERVER_URL);
 
   const sendMessage = (message: string) => {
     setMessageHistory((prev) => prev.concat({ message, outbound: true }));
@@ -31,14 +30,6 @@ function App() {
       );
     }
   }, [lastMessage]);
-
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
 
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
@@ -55,7 +46,7 @@ function App() {
         }}
       >
         <p style={{ marginBottom: 10 }}>
-          The WebSocket is currently <b>{connectionStatus}</b>
+          The WebSocket is currently <b>{connectionStatus[readyState]}</b>
         </p>
 
         <div
