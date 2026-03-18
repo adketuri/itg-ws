@@ -17,7 +17,6 @@ function App() {
     lastMessage,
     readyState,
   } = useWebSocket(import.meta.env.VITE_WS_SERVER_URL);
-
   const sendMessage = (message: string) => {
     setMessageHistory((prev) => prev.concat({ message, outbound: true }));
     sendSocket(message);
@@ -26,7 +25,7 @@ function App() {
   useEffect(() => {
     if (lastMessage !== null) {
       setMessageHistory((prev) =>
-        prev.concat({ message: lastMessage.data, outbound: false })
+        prev.concat({ message: lastMessage.data, outbound: false }),
       );
     }
   }, [lastMessage]);
@@ -46,7 +45,8 @@ function App() {
         }}
       >
         <p style={{ marginBottom: 10 }}>
-          The WebSocket is currently <b>{connectionStatus[readyState]}</b>
+          The WebSocket is currently <b>{connectionStatus[readyState]}</b> ($
+          {import.meta.env.VITE_WS_SERVER_URL})
         </p>
 
         <div
@@ -110,7 +110,7 @@ function App() {
                       code,
                       password,
                     },
-                  })
+                  }),
                 )
               }
               disabled={readyState !== ReadyState.OPEN}
@@ -124,7 +124,7 @@ function App() {
               sendMessage(
                 JSON.stringify({
                   event: "lobbyState",
-                })
+                }),
               )
             }
             disabled={readyState !== ReadyState.OPEN}
@@ -186,7 +186,7 @@ function App() {
                       songLength: 123,
                     },
                   },
-                })
+                }),
               )
             }
             disabled={readyState !== ReadyState.OPEN}
@@ -207,7 +207,7 @@ function App() {
             style={{ flex: 1 }}
             onClick={() =>
               sendMessage(
-                JSON.stringify({ event: "readyUp", data: { playerId: "P1" } })
+                JSON.stringify({ event: "readyUp", data: { playerId: "P1" } }),
               )
             }
             disabled={readyState !== ReadyState.OPEN}

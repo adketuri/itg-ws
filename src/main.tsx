@@ -18,5 +18,5 @@ createRoot(document.getElementById("root")!).render(
         <Route path="*" element={<Fallback />} />
       </Routes>
     </BrowserRouter>
-  </StrictMode>
+  </StrictMode>,
 );
