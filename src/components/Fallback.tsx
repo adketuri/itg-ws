@@ -2,10 +2,11 @@ import { FC, useState } from "react";
 
 export const Fallback: FC = () => {
   const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
   const [style, setStyle] = useState<"ranking" | "pacemaker">();
   const [copied, setCopied] = useState(false);
 
-  const fullUrl = `${window.location.origin}/widgets/${style}/${code}`;
+  const fullUrl = `${window.location.origin}/widgets/${style}/${code}${password ? "?password=" + password : ""}`;
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div
@@ -28,7 +29,14 @@ export const Fallback: FC = () => {
             onChange={(e) => setCode(e.target.value)}
             placeholder="ABCD"
             maxLength={4}
-            style={{ maxWidth: 100, width: 60 }}
+            style={{ maxWidth: 100 }}
+          />
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
+            maxLength={4}
+            style={{ maxWidth: 100, marginLeft: 10 }}
           />
         </div>
         {code.length >= 4 && (

@@ -52,7 +52,7 @@ export const Pacemaker: FC<{
               {getRanking(ranking)}
             </div>
             <div className="pacemaker-score" style={{ color }}>
-              {Number(player.exScore).toLocaleString(undefined, {
+              {Number(player.exScore / 100).toLocaleString(undefined, {
                 style: "percent",
                 minimumFractionDigits: 2,
               })}

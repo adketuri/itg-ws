@@ -24,7 +24,7 @@ export const Ranking: FC<{ players?: Array<Player> }> = ({ players }) => {
                 </div>
                 <div className="rank-ordinal">
                   {p.exScore !== undefined &&
-                    Number(p.exScore).toLocaleString(undefined, {
+                    Number(p.exScore / 100).toLocaleString(undefined, {
                       style: "percent",
                       minimumFractionDigits: 2,
                     })}

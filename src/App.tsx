@@ -100,23 +100,44 @@ function App() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button
-              onClick={() =>
-                sendMessage(
-                  JSON.stringify({
-                    event: "joinLobby",
-                    data: {
-                      machine: { player1: { playerName: "zexyu" } },
-                      code,
-                      password,
-                    },
-                  }),
-                )
-              }
-              disabled={readyState !== ReadyState.OPEN}
-            >
-              joinLobby
-            </button>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button
+                style={{ display: "flex", flex: 1, minWidth: 0 }}
+                onClick={() =>
+                  sendMessage(
+                    JSON.stringify({
+                      event: "joinLobby",
+                      data: {
+                        machine: { player1: { playerName: "zexyu" } },
+                        code,
+                        password,
+                      },
+                    }),
+                  )
+                }
+                disabled={readyState !== ReadyState.OPEN}
+              >
+                joinLobby
+              </button>
+              <button
+                style={{ display: "flex", flex: 1, minWidth: 0 }}
+                onClick={() =>
+                  sendMessage(
+                    JSON.stringify({
+                      event: "spectateLobby",
+                      data: {
+                        spectator: { profileName: "Widget" },
+                        code,
+                        password,
+                      },
+                    }),
+                  )
+                }
+                disabled={readyState !== ReadyState.OPEN}
+              >
+                spectateLobby
+              </button>
+            </div>
           </div>
           <button
             style={{ flex: 1 }}

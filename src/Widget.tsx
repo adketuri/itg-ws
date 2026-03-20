@@ -15,8 +15,9 @@ function Widget({ pacemaker }: { pacemaker?: boolean }) {
   const { code } = useParams();
   const [searchParams] = useSearchParams();
   const { lastMessage, readyState, sendMessage } = useWebSocket(
-    import.meta.env.VITE_WS_SERVER_URL
+    import.meta.env.VITE_WS_SERVER_URL,
   );
+  console.log("!AK last message", lastMessage, readyState);
 
   // On connect, spectate the room
   useEffect(() => {
@@ -30,7 +31,7 @@ function Widget({ pacemaker }: { pacemaker?: boolean }) {
             code: code?.toUpperCase(),
             password,
           },
-        })
+        }),
       );
     }
   }, [readyState]);
@@ -78,7 +79,7 @@ function Widget({ pacemaker }: { pacemaker?: boolean }) {
         }
       }
     }
-  }, [lastMessage]);
+  }, [lastMessage, pacemaker]);
 
   if (error) {
     return <>Error: {error}</>;
