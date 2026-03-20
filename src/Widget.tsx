@@ -96,8 +96,6 @@ function Widget({ pacemaker }: { pacemaker?: boolean }) {
   }
 
   if (lobby) {
-    console.log(lobby);
-
     // TODO: this used to be sent but I don't think it is anymore
     const progress =
       (lobby.players[0].songProgression?.currentTime || 0) /
