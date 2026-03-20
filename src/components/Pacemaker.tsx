@@ -32,6 +32,8 @@ export const Pacemaker: FC<{
   const max = Math.min(100, averageScore + range) - min;
   const displayScore = Math.max(player.exScore - min, 0);
 
+  console.log("!AK ", averageScore, min, max, displayScore);
+  console.log("!AK2", displayScore / max);
   const color = ranking === 0 ? "white" : "lightgray";
   return (
     <div className="pacemaker-bar-wrapper">
