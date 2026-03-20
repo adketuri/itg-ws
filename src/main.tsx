@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Widget from "./Widget.tsx";
 import { Fallback } from "./components/Fallback.tsx";
+import { DebugPacemaker } from "./components/DebugPacemaker.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById("root")!).render(
         {import.meta.env.VITE_DEBUG_ROUTE && (
           <Route path={import.meta.env.VITE_DEBUG_ROUTE} element={<App />} />
         )}
+        <Route path="/pacemaker" element={<DebugPacemaker />} />
         <Route path="*" element={<Fallback />} />
       </Routes>
     </BrowserRouter>

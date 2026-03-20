@@ -16,8 +16,18 @@ function Widget({ pacemaker }: { pacemaker?: boolean }) {
   const [searchParams] = useSearchParams();
   const { lastMessage, readyState, sendMessage } = useWebSocket(
     import.meta.env.VITE_WS_SERVER_URL,
+    {
+      reconnectAttempts: Infinity,
+      reconnectInterval: (attemptNumber) =>
+        Math.min(1000 * 2 ** attemptNumber, 10000),
+      shouldReconnect: (closeEvent) => {
+        if (closeEvent.code === 1000) {
+          return false;
+        }
+        return true;
+      },
+    },
   );
-  console.log("!AK last message", lastMessage, readyState);
 
   // On connect, spectate the room
   useEffect(() => {
@@ -29,12 +39,12 @@ function Widget({ pacemaker }: { pacemaker?: boolean }) {
           data: {
             spectator: { profileName: "Widget" },
             code: code?.toUpperCase(),
-            password,
+            password: password.toUpperCase(),
           },
         }),
       );
     }
-  }, [readyState]);
+  }, [code, readyState, searchParams, sendMessage]);
 
   // Handle any received messages
   const [lobby, setLobby] = useState<LobbyStatePayload>();
@@ -86,6 +96,9 @@ function Widget({ pacemaker }: { pacemaker?: boolean }) {
   }
 
   if (lobby) {
+    console.log(lobby);
+
+    // TODO: this used to be sent but I don't think it is anymore
     const progress =
       (lobby.players[0].songProgression?.currentTime || 0) /
       (lobby.players[0].songProgression?.totalTime || 1);

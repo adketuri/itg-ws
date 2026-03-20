@@ -26,13 +26,14 @@ export const Pacemaker: FC<{
     return null;
   }
 
-  const range = parseFloat(searchParams.get("pacemakerscale") || "1");
-  console.log(searchParams.get("range"), range);
+  const range = parseFloat(searchParams.get("pacemakerscale") || "100");
 
   const min = Math.max(0, averageScore - range);
-  const max = Math.min(1, averageScore + range) - min;
+  const max = Math.min(100, averageScore + range) - min;
   const displayScore = Math.max(player.exScore - min, 0);
 
+  console.log("!AK ", averageScore, min, max, displayScore);
+  console.log("!AK2", displayScore / max);
   const color = ranking === 0 ? "white" : "lightgray";
   return (
     <div className="pacemaker-bar-wrapper">
@@ -43,7 +44,8 @@ export const Pacemaker: FC<{
         <div
           className="pacemaker-bar-front"
           style={{
-            height: `${Math.floor((displayScore / max) * 100)}%`,
+            height: `${Math.floor((displayScore * 100) / max)}%`,
+            overflow: "hidden",
             backgroundColor: COLORS[index % COLORS.length],
           }}
         >

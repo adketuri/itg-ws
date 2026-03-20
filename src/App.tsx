@@ -45,7 +45,7 @@ function App() {
         }}
       >
         <p style={{ marginBottom: 10 }}>
-          The WebSocket is currently <b>{connectionStatus[readyState]}</b> ($
+          The WebSocket is currently <b>{connectionStatus[readyState]}</b> (
           {import.meta.env.VITE_WS_SERVER_URL})
         </p>
 
@@ -168,8 +168,8 @@ function App() {
                         currentTime: Math.random() * 10,
                         totalTime: 10,
                       },
-                      exScore: Math.random(),
-                      score: Math.random(),
+                      exScore: Math.random() * 100,
+                      score: Math.random() * 100,
                     },
                     player2: {
                       playerId: "P2",
@@ -180,8 +180,8 @@ function App() {
                         currentTime: Math.random() * 10,
                         totalTime: 10,
                       },
-                      exScore: Math.random(),
-                      score: Math.random(),
+                      exScore: Math.random() * 100,
+                      score: Math.random() * 100,
                     },
                   },
                 },
